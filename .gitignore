@@ -6,6 +6,13 @@ __pycache__/
 # C extensions
 *.so
 
+# Datasets
+datasets/pain/pain_organized_ds
+datasets/emotions/fer2013
+
+# Pickled files
+*.pickle
+
 # Distribution / packaging
 .Python
 env/
