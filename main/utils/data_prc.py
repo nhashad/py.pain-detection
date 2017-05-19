@@ -3,8 +3,11 @@ import pickle
 import numpy as np
 import pandas as pd
 
+TRAIN_SIZE = 28709
+DATASET_SIZE = 35887
+DATASET_PATH = "../datasets/emotions/fer2013/"
 
-dataset = np.zeros((35887,3))
+dataset = np.zeros((DATASET_SIZE,3))
 
 def get_dataset():
     return dataset
@@ -12,7 +15,7 @@ def get_dataset():
 
 def dataset_pickle(filename, force):
 
-    filename = "../datasets/emotions/fer2013/"+ filename
+    filename = DATASET_PATH + filename
 
     pickle_file  = os.path.splitext(filename)[0] + '.pickle'
 
@@ -23,11 +26,11 @@ def dataset_pickle(filename, force):
     else:
         with open(filename, 'rb') :
             dataset = pd.read_csv(filename)
-            X_train = dataset.pixels[0:28709]
-            y_train = dataset.emotion[0:28709]
+            X_train = dataset.pixels[0:TRAIN_SIZE]
+            y_train = dataset.emotion[0:TRAIN_SIZE]
 
-            X_test = dataset.pixels[28709:35887]
-            y_test = dataset.emotion[28709:35887]
+            X_test = dataset.pixels[TRAIN_SIZE:DATASET_SIZE]
+            y_test = dataset.emotion[TRAIN_SIZE:DATASET_SIZE]
 
         
         X_train = np.array(list(map(lambda arr: np.fromiter(list(map(lambda str: int(str),
@@ -56,7 +59,7 @@ def dataset_pickle(filename, force):
 
 def dataset_loading(filename):
 
-    filename = "../datasets/emotions/fer2013/" + filename + '.pickle'
+    filename = DATASET_PATH + filename + '.pickle'
 
     with open(filename, 'rb') as picklefile:
         save = pickle.load(picklefile)
