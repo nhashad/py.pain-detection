@@ -8,6 +8,7 @@ from keras.utils import np_utils
 TRAIN_SIZE = 28709
 DATASET_SIZE = 35887
 NUM_CLASSES = 7
+PICTURE_DIM = 48
 
 DATASET_PATH = "../datasets/emotions/fer2013/"
 
@@ -61,14 +62,6 @@ def dataset_pickle(filename, force):
             pickle.dump(save, picklefile, pickle.HIGHEST_PROTOCOL)
             print (pickle_file, 'pickled successfully!')
             
-
-def y_to_categorical(y_train, y_test):
-    
-        # Convert class vectors to binary class matrices.
-        y_train = keras.utils.to_categorical(y_train, NUM_CLASSES)
-        y_test = keras.utils.to_categorical(y_test, NUM_CLASSES)
-        
-        return y_train, y_test
             
 def dataset_loading(filename):
 
@@ -86,3 +79,11 @@ def dataset_loading(filename):
         y_test = save['dataset_ytest']
 
     return X_train, y_train, X_test, y_test
+
+def prepare_examples(x_train, x_test):
+    
+    return np.reshape(x_train,(x_train.shape[0], PICTURE_DIM, PICTURE_DIM,1)),np.reshape(x_test,(x_test.shape[0], PICTURE_DIM, PICTURE_DIM,1))
+
+def y_to_categorical(y_train, y_test):
+    
+    return keras.utils.to_categorical(y_train, NUM_CLASSES), keras.utils.to_categorical(y_test, NUM_CLASSES)
