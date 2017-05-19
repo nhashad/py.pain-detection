@@ -29,6 +29,18 @@ def dataset_pickle(filename, force):
             X_test = dataset.pixels[28709:35887]
             y_test = dataset.emotion[28709:35887]
 
+        
+        X_train = np.array(list(map(lambda arr: np.fromiter(list(map(lambda str: int(str),
+                     arr)), dtype= np.int), list(map(lambda str: str.split(),
+                      X_train)))))
+
+        y_train = np.fromiter(list(map(int, y_train)), dtype=np.int)
+
+        X_test = np.array(list(map(lambda arr: np.fromiter(list(map(lambda str: int(str),
+                     arr)), dtype= np.int), list(map(lambda str: str.split(),
+                      X_test)))))
+        y_test = np.fromiter(list(map(int, y_test)), dtype=np.int)
+        
         print ('Pickling', pickle_file, '...')
 
         with open(pickle_file, 'wb') as picklefile:
@@ -49,16 +61,12 @@ def dataset_loading(filename):
     with open(filename, 'rb') as picklefile:
         save = pickle.load(picklefile)
 
-        X_train = np.array(list(map(lambda arr: np.fromiter(list(map(lambda str: int(str),
-                     arr)), dtype= np.int), list(map(lambda str: str.split(),
-                      save['dataset_Xtrain'])))))
+        X_train = save['dataset_Xtrain']
 
-        y_train = np.fromiter(list(map(int, save['dataset_ytrain'])), dtype=np.int)
+        y_train = save['dataset_ytrain']
 
-        X_test = np.array(list(map(lambda arr: np.fromiter(list(map(lambda str: int(str),
-                     arr)), dtype= np.int), list(map(lambda str: str.split(),
-                      save['dataset_Xtest'])))))
+        X_test = save['dataset_Xtest']
 
-        y_test = np.fromiter(list(map(int, save['dataset_ytest'])), dtype=np.int)
+        y_test = save['dataset_ytest']
 
     return X_train, y_train, X_test, y_test
