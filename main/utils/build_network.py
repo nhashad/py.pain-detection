@@ -33,7 +33,7 @@ def build_model(x_train):
     
     model.add(Flatten())
     
-    model.add(Dense(512, activity_regularizer= regularizers.l2(0.00025)))
+    model.add(Dense(512))
     model.add(Activation('relu'))
     
     model.add(Dense(NUM_CLASSES))
