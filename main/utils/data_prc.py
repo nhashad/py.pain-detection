@@ -7,7 +7,7 @@ from keras.utils import np_utils
 
 TRAIN_SIZE = 28709
 DATASET_SIZE = 35887
-NUM_CLASSES = 7
+NUM_CLASSES = 6
 PICTURE_DIM = 48
 
 DATASET_PATH = "../datasets/emotions/fer2013/"
@@ -17,6 +17,19 @@ dataset = np.zeros((DATASET_SIZE,3))
 def get_dataset():
     return dataset
 
+def remove_disgust(dataset):
+    emotion = dataset.pop('emotion')
+    print ("Changing Disgust to Anger")
+    
+    for i in range(emotion.size):
+        if(emotion[i] == 0 or emotion[i] == 1):
+            emotion[i] = 0
+        else:
+            emotion[i] -= 1
+    
+    dataset['emotion'] = emotion
+    return dataset
+    
 
 def dataset_pickle(filename, force):
 
@@ -28,9 +41,11 @@ def dataset_pickle(filename, force):
     if(os.path.exists(pickle_file) and not force):
         print ('%s already exists. Skipping pickling.' % pickle_file)
         dataset = pd.read_csv(filename)
+        dataset = remove_disgust(dataset)
     else:
         with open(filename, 'rb') :
             dataset = pd.read_csv(filename)
+            dataset = remove_disgust(dataset)
             X_train = dataset.pixels[0:TRAIN_SIZE]
             y_train = dataset.emotion[0:TRAIN_SIZE]
 
@@ -61,8 +76,9 @@ def dataset_pickle(filename, force):
             }
             pickle.dump(save, picklefile, pickle.HIGHEST_PROTOCOL)
             print (pickle_file, 'pickled successfully!')
-            
-            
+          
+        
+
 def dataset_loading(filename):
 
     filename = DATASET_PATH + filename + '.pickle'
