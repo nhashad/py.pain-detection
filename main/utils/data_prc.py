@@ -1,16 +1,23 @@
-import os
+import os, os.path
 import pickle
 import numpy as np
 import pandas as pd
 import keras
 from keras.utils import np_utils
 
+#emotion
 TRAIN_SIZE = 28709
 DATASET_SIZE = 35887
 NUM_CLASSES = 6
 PICTURE_DIM = 48
-
 DATASET_PATH = "../datasets/emotions/fer2013/"
+
+#pain
+TRAIN_SIZE_PAIN = 26865
+VALIDATION_SIZE_PAIN = 9557
+TEST_SIZE_PAIN = 9769
+NUM_CLASSES_PAIN = 15
+DATASET_PATH_PAIN = "../datasets/pain/pain_organized_ds/"
 
 dataset = np.zeros((DATASET_SIZE,3))
 
