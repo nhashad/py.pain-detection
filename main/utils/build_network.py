@@ -5,7 +5,7 @@ from keras.layers import LSTM
 from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Conv2D, MaxPooling2D
 
-NUM_CLASSES = 7
+NUM_CLASSES = 6
 PICTURE_DIM = 48
 
 def print_metadata(x_train, x_test):
@@ -20,16 +20,24 @@ def build_model(x_train):
     model.add(Conv2D(32, (3, 3), padding='same', input_shape=x_train.shape[1:]))
     model.add(Activation('relu'))
     
+    model.add(Dropout(0.25))
+        
     model.add(MaxPooling2D(pool_size=(2, 2)))
     
-    model.add(Conv2D(32, (3, 3), activity_regularizer= regularizers.l2(0.00025)))
+    model.add(Conv2D(32, (3, 3), activity_regularizer= regularizers.l2(0.0003)))
     model.add(Activation('relu'))
+    
+    model.add(Dropout(0.25))
     
     model.add(MaxPooling2D(pool_size=(2, 2)))
     
-    model.add(Conv2D(64, (3, 3), padding='same', activity_regularizer= regularizers.l2(0.00025)))
+    model.add(Conv2D(64, (3, 3), padding='same', activity_regularizer= regularizers.l2(0.0003)))
     model.add(Activation('relu'))
     
+    model.add(Dropout(0.25))
+    
+    model.add(Conv2D(128, (3, 3)))
+    model.add(Activation('relu')) 
     
     model.add(Flatten())
     
@@ -41,5 +49,3 @@ def build_model(x_train):
 
     return model
     
-""" model.add(Conv2D(64, (3, 3)))
-    model.add(Activation('relu')) """

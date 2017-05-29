@@ -13,7 +13,7 @@ def sgdOpt(learningrate= 0.01, momentum= 0.0,  decay= 0.0, nestrov=False):
     return opt
     
 
-def rmsPropOpt(learningrate=0.0001, rho=0.9, epsilon=1e-08, decay=0.0):
+def rmsPropOpt(learningrate=0.00025, rho=0.9, epsilon=1e-08, decay=0.0):
     
     # initiate RMSprop optimizer
     opt = keras.optimizers.rmsprop(lr = learningrate, rho=rho, epsilon= epsilon, decay = decay)
@@ -41,9 +41,6 @@ def compiling(model, opt):
     
     
 def training(model, batch_size, epochs, x_train, y_train):
-    
-    x_train = x_train.astype('float32')
-    x_train/=255
 
     hist = model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, 
               validation_split=0.3, shuffle=True, verbose=1)
@@ -51,14 +48,12 @@ def training(model, batch_size, epochs, x_train, y_train):
     return model, hist.history
 
 
+def eval_plot(model, x_eval, y_eval, history, epochs):
+    
 
-def eval_plot(model, x_test, y_test, history, epochs):
-    
-    x_test = x_test.astype('float32')
-    x_test/=255
-    
-    scores = model.evaluate(x_test, y_test, batch_size = 128,verbose=0)
+    scores = model.evaluate(x_eval, y_eval, batch_size = 128,verbose=0)
     print(scores)
+    
     
     epochs_array = np.arange(epochs)
     plt.figure(1)
