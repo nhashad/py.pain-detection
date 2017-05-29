@@ -98,7 +98,15 @@ def dataset_loading(filename):
 
 def prepare_examples(x_train, x_test):
     
-    return np.reshape(x_train,(x_train.shape[0], PICTURE_DIM, PICTURE_DIM,1)),np.reshape(x_test,(x_test.shape[0], PICTURE_DIM, PICTURE_DIM,1))
+    x_train, x_test =  np.reshape(x_train,(x_train.shape[0], PICTURE_DIM, PICTURE_DIM,1)),np.reshape(x_test,(x_test.shape[0], PICTURE_DIM, PICTURE_DIM,1))
+    
+    x_train = x_train.astype('float32')
+    x_train/=255
+     
+    x_test = x_test.astype('float32')
+    x_test/=255
+    
+    return x_train, x_test
 
 def y_to_categorical(y_train, y_test):
     
