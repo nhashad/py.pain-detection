@@ -1,18 +1,45 @@
-import os
+import os, os.path
 import pickle
 import numpy as np
 import pandas as pd
 import keras
 from keras.utils import np_utils
+import matplotlib.pyplot as plt
+from PIL import Image
 
+#emotion
 TRAIN_SIZE = 28709
 DATASET_SIZE = 35887
 NUM_CLASSES = 6
 PICTURE_DIM = 48
-
 DATASET_PATH = "../datasets/emotions/fer2013/"
 
+#pain
+TRAIN_SIZE_PAIN = 26865
+VALIDATION_SIZE_PAIN = 9557
+TEST_SIZE_PAIN = 9769
+NUM_CLASSES_PAIN = 15
+DATASET_PATH_PAIN = "../datasets/pain/pain_organized_ds/"
+
 dataset = np.zeros((DATASET_SIZE,3))
+
+def dataset_pickle_pain():
+     for label,folder_name in enumerate(os.listdir(DATASET_PATH_PAIN)):
+            folder = os.path.join(DATASET_PATH_PAIN,folder_name)
+            print(label,folder_name)
+            for lbl, subfolder_name in enumerate(os.listdir(folder)):
+                subfolder = os.path.join(folder, subfolder_name)
+                print(lbl,subfolder_name)
+                for f in os.listdir(subfolder):
+                    fileName = os.path.join(subfolder, f)
+                    print(fileName)
+                    with open(fileName) as FileObj:
+                        X_file_temp = []
+                        im = Image.open(fileName)
+                        pixels = list(im.getdata())
+                        ## TODO: extracting Xs for val, test, train so as Ys, shuffle coresspondingly then pickle
+    
+    
 
 def get_dataset():
     return dataset
