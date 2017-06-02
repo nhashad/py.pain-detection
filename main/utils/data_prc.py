@@ -5,7 +5,6 @@ import pandas as pd
 import keras
 from keras.utils import np_utils
 import matplotlib.pyplot as plt
-from keras.preprocessing.image import ImageDataGenerator
 from keras.preprocessing import image as image_utils
 from PIL import Image
 from scipy.misc import imread, imsave
@@ -13,11 +12,11 @@ from scipy.misc import imread, imsave
 
 
 #emotion
-TRAIN_SIZE = 28709
-DATASET_SIZE = 35887
-NUM_CLASSES = 7
-PICTURE_DIM = 48
-DATASET_PATH = "../datasets/emotions/fer2013/"
+TRAIN_SIZE_EMOTION = 28709
+DATASET_SIZE_EMOTION = 35887
+NUM_CLASSES_EMOTION = 7
+PICTURE_DIM_EMOTION = 48
+DATASET_PATH_EMOTION = "../datasets/emotions/fer2013/"
 
 #pain
 TRAIN_SIZE_PAIN = 26859
@@ -31,7 +30,7 @@ PICTURE_DIM_PAIN_H = 240
 PICTURE_DIM_PAIN_W = 320
 DATASET_PATH_PAIN = "../datasets/pain/pain_organized_ds/"
 
-dataset = np.zeros((DATASET_SIZE,3))
+emotion_dataset = np.zeros((DATASET_SIZE_EMOTION,3))
 
 def dataset_pickle_pain(filename):
     
@@ -111,7 +110,7 @@ def dataset_pickle_pain(filename):
             pickle.dump(save, picklefile, pickle.HIGHEST_PROTOCOL)
             print (pickle_file, 'pickled successfully!')
 
-def dataset_loading(filename):
+def dataset_loading_pain(filename):
 
     filename = DATASET_PATH_PAIN + filename + '.pickle'
 
@@ -134,11 +133,11 @@ def dataset_loading(filename):
             
                 
 
-def get_dataset():
-    return dataset
+def get_emotions_dataset():
+    return emotion_dataset
 
-def remove_disgust(dataset):
-    emotion = dataset.pop('emotion')
+def remove_disgust(emotion_dataset):
+    emotion = emotion_dataset.pop('emotion')
     print ("Changing Disgust to Anger")
     
     for i in range(emotion.size):
@@ -147,30 +146,30 @@ def remove_disgust(dataset):
         else:
             emotion[i] -= 1
     
-    dataset['emotion'] = emotion
-    return dataset
+    emotion_dataset['emotion'] = emotion
+    return emotion_dataset
     
 
-def dataset_pickle(filename, force):
+def dataset_pickle_emotions(filename, force):
 
-    filename = DATASET_PATH + filename
+    filename = DATASET_PATH_EMOTION + filename
 
     pickle_file  = os.path.splitext(filename)[0] + '.pickle'
 
-    global dataset
+    global emotion_dataset
     if(os.path.exists(pickle_file) and not force):
         print ('%s already exists. Skipping pickling.' % pickle_file)
-        dataset = pd.read_csv(filename)
+        emotion_dataset = pd.read_csv(filename)
         #dataset = remove_disgust(dataset)
     else:
         with open(filename, 'rb') :
-            dataset = pd.read_csv(filename)
+            emotion_dataset = pd.read_csv(filename)
             #dataset = remove_disgust(dataset)
-            X_train = dataset.pixels[0:TRAIN_SIZE]
-            y_train = dataset.emotion[0:TRAIN_SIZE]
+            X_train = dataset.pixels[0:TRAIN_SIZE_EMOTION]
+            y_train = dataset.emotion[0:TRAIN_SIZE_EMOTION]
 
-            X_test = dataset.pixels[TRAIN_SIZE:DATASET_SIZE]
-            y_test = dataset.emotion[TRAIN_SIZE:DATASET_SIZE]
+            X_test = dataset.pixels[TRAIN_SIZE_EMOTION:DATASET_SIZE_EMOTION]
+            y_test = dataset.emotion[TRAIN_SIZE_EMOTION:DATASET_SIZE_EMOTION]
 
         
         X_train = np.array(list(map(lambda arr: np.fromiter(list(map(lambda str: int(str),
@@ -199,9 +198,9 @@ def dataset_pickle(filename, force):
           
         
 
-def dataset_loading(filename):
+def dataset_loading_emotion(filename):
 
-    filename = DATASET_PATH + filename + '.pickle'
+    filename = DATASET_PATH_EMOTION + filename + '.pickle'
 
     with open(filename, 'rb') as picklefile:
         save = pickle.load(picklefile)
@@ -216,9 +215,9 @@ def dataset_loading(filename):
 
     return X_train, y_train, X_test, y_test
 
-def prepare_examples(x_train, x_test):
+def prepare_emotions_examples(x_train, x_test):
     
-    x_train, x_test =  np.reshape(x_train,(x_train.shape[0], PICTURE_DIM, PICTURE_DIM,1)),np.reshape(x_test,(x_test.shape[0], PICTURE_DIM, PICTURE_DIM,1))
+    x_train, x_test =  np.reshape(x_train,(x_train.shape[0], PICTURE_DIM_EMOTION, PICTURE_DIM_EMOTION,1)),np.reshape(x_test,(x_test.shape[0], PICTURE_DIM_EMOTION, PICTURE_DIM_EMOTION,1))
     
     x_train = x_train.astype('float32')
     x_train/=255
@@ -228,6 +227,8 @@ def prepare_examples(x_train, x_test):
     
     return x_train, x_test
 
-def y_to_categorical(y_train, y_test):
-    
-    return keras.utils.to_categorical(y_train, NUM_CLASSES), keras.utils.to_categorical(y_test, NUM_CLASSES)
+def y_to_categorical(y_train, y_test, num_of_classes, y_val=None):
+    if (y_val is None):
+        return keras.utils.to_categorical(y_train, num_of_classes), keras.utils.to_categorical(y_test, num_of_classes)
+    else:
+        return keras.utils.to_categorical(y_train, num_of_classes), keras.utils.to_categorical(y_test, num_of_classes),keras.utils.to_categorical(y_val, num_of_classes) 
