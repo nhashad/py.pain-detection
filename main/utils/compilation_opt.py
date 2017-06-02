@@ -3,6 +3,7 @@ import keras
 import matplotlib.pyplot as plt
 from keras.constraints import maxnorm
 from keras.optimizers import SGD
+from keras.preprocessing.image import ImageDataGenerator
 
 
 
@@ -42,8 +43,26 @@ def compiling(model, opt):
     
 def training(model, batch_size, epochs, x_train, y_train):
 
-    hist = model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, 
-              validation_split=0.3, shuffle=True, verbose=1)
+    datagen = ImageDataGenerator(
+    featurewise_center=True,
+    featurewise_std_normalization=True,
+    rotation_range=20,
+    width_shift_range=0.2,
+    height_shift_range=0.2,
+    horizontal_flip=True)
+    
+    
+    # compute quantities required for featurewise normalization
+    # (std, mean, and principal components if ZCA whitening is applied)
+    datagen.fit(x_train)
+
+    # fits the model on batches with real-time data augmentation:
+    hist = model.fit_generator(datagen.flow(x_train[:26409], y_train[:26409], batch_size=batch_size),
+                        steps_per_epoch=len(x_train)/5, epochs=epochs, validation_data=datagen.flow(x_train[:-2300], y_train[:-2300], batch_size=batch_size), nb_val_samples=x_train.shape[0])
+    
+    
+    #hist = model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, 
+    #          validation_split=0.3, shuffle=True, verbose=1)
     
     return model, hist.history
 
