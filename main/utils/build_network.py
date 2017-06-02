@@ -5,7 +5,7 @@ from keras.layers import LSTM
 from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Conv2D, MaxPooling2D
 
-NUM_CLASSES = 6
+NUM_CLASSES = 7
 PICTURE_DIM = 48
 
 def print_metadata(x_train, x_test):
