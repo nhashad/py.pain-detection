@@ -66,6 +66,27 @@ def training(model, batch_size, epochs, x_train, y_train):
     
     return model, hist.history
 
+def training_painds(model, batch_size, epochs, x_train, y_train, x_val, y_val):
+    
+    datagen = ImageDataGenerator(
+    featurewise_center=True,
+    featurewise_std_normalization=True,
+    rotation_range=30,
+    width_shift_range=0.3,
+    height_shift_range=0.3,
+    horizontal_flip=True)
+    
+    
+    # compute quantities required for featurewise normalization
+    # (std, mean, and principal components if ZCA whitening is applied)
+    datagen.fit(x_train)
+
+    # fits the model on batches with real-time data augmentation:
+    hist = model.fit_generator(datagen.flow(x_train, y_train, batch_size=batch_size),
+                        steps_per_epoch=len(x_train)/2, epochs=epochs, validation_data=datagen.flow(x_val, y_val, batch_size=batch_size), nb_val_samples=x_train.shape[0])
+    
+    
+    return model, hist.history
 
 def eval_plot(model, x_eval, y_eval, history, epochs):
     
