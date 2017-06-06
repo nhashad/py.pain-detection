@@ -190,7 +190,7 @@ def build_model(x_train):
     model.add(Dense(512))
     model.add(Activation('relu'))
     
-    model.add(Dense(NUM_CLASSES_PAIN))
+    model.add(Dense(NUM_CLASSES))
     model.add(Activation('softmax'))
 
     return model
