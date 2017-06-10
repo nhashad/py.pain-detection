@@ -7,7 +7,6 @@ setup(name='example1',
   description='example to run keras on gcloud ml-engine',
   author='Nabila63Ahmed',
   author_email='nabila.ahmed63@gmail.com',
-  license='MIT',
   install_requires=[
       'keras',
       'h5py'
