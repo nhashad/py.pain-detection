@@ -1,7 +1,7 @@
 import utils.data_prc as dp 
 import utils.build_network as bn
 import utils.compilation_opt as cpo
-%pylab inline
+#%pylab inline
 
 
 np.random.seed(42)
@@ -15,7 +15,7 @@ import argparse
 tf.reset_default_graph()
 
 batch_size = 128
-num_classes = 7
+num_classes = 8
 epochs = 20
 
 layer1_size = 32
@@ -27,19 +27,14 @@ def train_model(train_file='fer2013.pickle', job_dir='./tmp/main-1', **args):
     print('Using logs_path located at {}'.format(logs_path))
     print('-----------------------')
     #file_stream = file_io.FileIO(train_file, mode='r')
-    x_train, y_train, x_test, y_test  = dp.dataset_loading_emotion(train_file.split('.')[0])
+    x_train, y_train, x_test, y_test, x_val, y_val = dp.dataset_loading('fer2013')
     
-    #x_train = x_train.toarray()
-    #x_test = x_test.toarray()
-    
-    x_train /= np.max(x_train)
-    x_test /= np.max(x_test)
-
     print(x_train.shape, y_train.shape, 'train samples,', type(x_train[0][0]), ' ', type(y_train[0][0]))
-    print(x_test.shape,  y_test.shape,  'test samples,',  type(x_test[0][0]),  ' ', type(y_train[0][0]))
+    print(x_val.shape, y_val.shape, 'validation samples,', type(x_val[0][0]), ' ', type(y_val[0][0]))
+    print(x_test.shape,  y_test.shape,  'test samples,',  type(x_test[0][0]),  ' ', type(y_test0][0]))
 
     # convert class vectors to binary class matrices. Our input already made this. No need to do it again
-    y_train, y_test = dp.y_to_categorical( y_train, y_test, num_classes)
+    y_train, y_test, y_val = dp.y_to_categorical( y_train, y_test, num_classes, y_val)
 
     model = bn.build_model(x_train)
     opt = cpo.adamOpt() 
@@ -48,7 +43,7 @@ def train_model(train_file='fer2013.pickle', job_dir='./tmp/main-1', **args):
     model.compile(loss='categorical_crossentropy',
                   optimizer= opt,
                   metrics=['accuracy'])
-    model, history = cpo.training(model, batch_size, epochs, x_train, y_train)
+    model, history = cpo.training(model, batch_size, epochs, x_train, y_train, x_val, y_val)
 
     score = model.evaluate(x_test, y_test, verbose=0)
     print('Test loss:', score[0])
