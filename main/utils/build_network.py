@@ -6,9 +6,10 @@ from keras.layers import LSTM
 from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Conv2D, MaxPooling2D, BatchNormalization, AveragePooling2D
 
-NUM_CLASSES = 7
-NUM_CLASSES_PAIN=16
+NUM_CLASSES = 8
+NUM_CLASSES_PAIN=13
 PICTURE_DIM = 48
+
 
 def print_metadata(x_train, x_test):
     print('x_train shape:', x_train.shape)
