@@ -42,8 +42,12 @@ def compiling(model, opt):
     
     
 def training(model, batch_size, epochs, x_train, y_train, x_val, y_val):
+    
+    #hist = model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, 
+     #         validation_data= (x_val, y_val), shuffle=True, verbose=1)
+    
 
-   """ datagen = ImageDataGenerator(
+    datagen = ImageDataGenerator(
     featurewise_center=True,
     featurewise_std_normalization=True,
     rotation_range=20,
@@ -58,11 +62,9 @@ def training(model, batch_size, epochs, x_train, y_train, x_val, y_val):
 
     # fits the model on batches with real-time data augmentation:
     hist = model.fit_generator(datagen.flow(x_train, y_train, batch_size=batch_size),
-                        steps_per_epoch=len(x_train)/5, epochs=epochs, validation_data=datagen.flow(x_val, y_val, batch_size=batch_size), nb_val_samples=x_train.shape[0])
-    """
+                        steps_per_epoch=len(x_train), epochs=epochs, validation_data=datagen.flow(x_val, y_val, batch_size=batch_size), nb_val_samples=x_train.shape[0])
     
-    hist = model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, 
-              validation_data= (x_val, y_val), shuffle=True, verbose=1)
+    
     
     return model, hist.history
 

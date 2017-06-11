@@ -50,9 +50,9 @@ def dataset_pickle_pain(filename):
         X_test = np.empty([TEST_SIZE_PAIN_GEATER_2, PICTURE_DIM_PAIN_H,PICTURE_DIM_PAIN_W,3])
         y_test = np.empty([TEST_SIZE_PAIN_GEATER_2,])
         
-        X_train_gray = np.empty([TRAIN_SIZE_PAIN_GEATER_2, PICTURE_DIM_PAIN_H/5,PICTURE_DIM_PAIN_H/5,1])
-        X_val_gray = np.empty([VALIDATION_SIZE_PAIN_GEATER_2, PICTURE_DIM_PAIN_H/5,PICTURE_DIM_PAIN_H/5,1])
-        X_test_gray = np.empty([TEST_SIZE_PAIN_GEATER_2, PICTURE_DIM_PAIN_H/5,PICTURE_DIM_PAIN_H/5,1])
+        X_train_gray = np.empty([TRAIN_SIZE_PAIN_GEATER_2, PICTURE_DIM_EMOTION,PICTURE_DIM_EMOTION,1])
+        X_val_gray = np.empty([VALIDATION_SIZE_PAIN_GEATER_2, PICTURE_DIM_EMOTION,PICTURE_DIM_EMOTION,1])
+        X_test_gray = np.empty([TEST_SIZE_PAIN_GEATER_2, PICTURE_DIM_EMOTION,PICTURE_DIM_EMOTION,1])
         
 
         train_indx = 0
@@ -70,17 +70,19 @@ def dataset_pickle_pain(filename):
                         image = image_utils.img_to_array(image).astype(np.float32)
                         image = image/ 255.
 
-                        gray_image = image_utils.load_img(fileName, target_size=(PICTURE_DIM_PAIN_H/5, PICTURE_DIM_PAIN_H/5))
+                        gray_image = image_utils.load_img(fileName, target_size=(PICTURE_DIM_EMOTION, PICTURE_DIM_EMOTION))
                         gray_image = image_utils.img_to_array(gray_image).astype(np.float32)
                         gray_image = gray_image/ 255.
                         gray_image = np.dot(gray_image[..., :3], [0.299, 0.587, 0.114])
                         
-                        print ('Size: ', gray_image.size)
-                        print ('Shape: ', gray_image.shape)
-                        plt.imshow(gray_image)
-                        plt.show()
-                        print(gray_images)
-
+                        #plt.imshow(gray_image)
+                        #plt.show()
+                        
+                        gray_image = np.reshape(gray_image, (48, 48, 1))
+                        #print ('Size: ', gray_image.size)
+                        #print ('Shape: ', gray_image.shape)
+                        
+                        
                         if (folder_name == 'train'):
                             X_train[train_indx] = image
                             y_train[train_indx] = int(subfolder_name)
@@ -251,9 +253,9 @@ def dataset_pickle_emotions(filename, force, X_train_pain, X_test_pain, X_val_pa
             print (pickle_file, 'pickled successfully!')
 
 
-def prepare_emotions_examples(x_train, x_test):
+def prepare_emotions_examples(x_train, x_test, x_val):
     
-    x_train, x_test =  np.reshape(x_train,(x_train.shape[0], PICTURE_DIM_EMOTION, PICTURE_DIM_EMOTION,1)),np.reshape(x_test,(x_test.shape[0], PICTURE_DIM_EMOTION, PICTURE_DIM_EMOTION,1)),np.reshape(x_val,(x_val.shape[0], PICTURE_DIM_EMOTION, PICTURE_DIM_EMOTION,1))
+    x_train, x_test, x_val =  np.reshape(x_train,(x_train.shape[0], PICTURE_DIM_EMOTION, PICTURE_DIM_EMOTION,1)),np.reshape(x_test,(x_test.shape[0], PICTURE_DIM_EMOTION, PICTURE_DIM_EMOTION,1)),np.reshape(x_val,(x_val.shape[0], PICTURE_DIM_EMOTION, PICTURE_DIM_EMOTION,1))
     
     x_train = x_train.astype('float32')
     x_train/=255
