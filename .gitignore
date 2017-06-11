@@ -9,6 +9,7 @@ __pycache__/
 # Png, csv files
 *.png
 *.csv
+*.pickle
 
 # Distribution / packaging
 .Python
