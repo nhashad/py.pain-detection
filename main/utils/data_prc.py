@@ -30,8 +30,8 @@ VALIDATION_SIZE_PAIN_GEATER_2 = 586
 TEST_SIZE_PAIN = 9753
 TEST_SIZE_PAIN_GEATER_2 = 652
 NUM_CLASSES_PAIN = 16
-PICTURE_DIM_PAIN_H = 240
-PICTURE_DIM_PAIN_W = 320
+PICTURE_DIM_PAIN_H = 160
+PICTURE_DIM_PAIN_W = 160
 DATASET_PATH_PAIN = "../datasets/pain/pain_organized_ds/"
 
 emotion_dataset = np.zeros((DATASET_SIZE_EMOTION,3))
@@ -257,14 +257,20 @@ def prepare_emotions_examples(x_train, x_test, x_val):
     
     x_train, x_test, x_val =  np.reshape(x_train,(x_train.shape[0], PICTURE_DIM_EMOTION, PICTURE_DIM_EMOTION,1)),np.reshape(x_test,(x_test.shape[0], PICTURE_DIM_EMOTION, PICTURE_DIM_EMOTION,1)),np.reshape(x_val,(x_val.shape[0], PICTURE_DIM_EMOTION, PICTURE_DIM_EMOTION,1))
     
-    x_train = x_train.astype('float32')
-    x_train/=255
+    if (x_train.shape[1]==160):
+        x_train = x_train.astype('uint8')
+        x_val = x_val.astype('uint8')
+        x_test = x_test.astype('uint8')
     
-    x_val = x_val.astype('float32')
-    x_val/=255
-     
-    x_test = x_test.astype('float32')
-    x_test/=255
+    else:
+        x_train = x_train.astype('float32')
+        x_train/=255
+
+        x_val = x_val.astype('float32')
+        x_val/=255
+
+        x_test = x_test.astype('float32')
+        x_test/=255
     
     return x_train, x_test, x_val
 
