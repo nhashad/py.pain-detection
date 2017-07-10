@@ -41,6 +41,7 @@ def dataset_pickle_pain(filename):
     pickle_file  = DATASET_PATH_PAIN + filename+'.pickle'
     if(os.path.exists(pickle_file)):
         print ('%s already exists. Skipping pickling.' % pickle_file)
+        return None, None, None
     
     else:
         X_train = np.empty([TRAIN_SIZE_PAIN_GEATER_2, PICTURE_DIM_PAIN_H,PICTURE_DIM_PAIN_W,3])
@@ -132,7 +133,7 @@ def dataset_pickle_pain(filename):
             pickle.dump(save, picklefile, pickle.HIGHEST_PROTOCOL)
             print (pickle_file, 'pickled successfully!')
             
-            return X_train_gray, X_test_gray, X_val_gray
+        return X_train_gray, X_test_gray, X_val_gray
 
 def dataset_loading(filename):
     if (filename == 'fer2013'):
@@ -173,7 +174,7 @@ def remove_disgust(emotion_dataset):
     return emotion_dataset
     
 
-def dataset_pickle_emotions(filename, force, X_train_pain, X_test_pain, X_val_pain):
+def dataset_pickle_emotions(filename, X_train_pain, X_test_pain, X_val_pain, force=False):
 
     filename = DATASET_PATH_EMOTION + filename
 
