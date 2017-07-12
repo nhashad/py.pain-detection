@@ -6,10 +6,12 @@ __pycache__/
 # C extensions
 *.so
 
-# Png, csv files
+# Png, xlsx, pickle, h5 and csv files
 *.png
 *.csv
+*.xlsx
 *.pickle
+*.h5
 
 # Distribution / packaging
 .Python
