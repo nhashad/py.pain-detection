@@ -214,15 +214,15 @@ def build_pain_model(x_train):
     
     model = Sequential()
     
-    model.add(Conv2D(32, (10, 10, 3), padding='same', input_shape=x_train.shape[1:]))
+    model.add(Conv2D(32, (10, 10), padding='same', input_shape=x_train.shape[1:]))
     model.add(Activation('relu'))
     
-    model.add(Conv2D(32, (10, 10, 3), padding='same'))
+    model.add(Conv2D(32, (10, 10), padding='same'))
     model.add(Activation('relu'))
     
     model.add(MaxPooling2D(pool_size=(4, 4)))
     
-    model.add(Conv2D(32, (10, 10, 3), padding='same'))
+    model.add(Conv2D(32, (10, 10), padding='same'))
     model.add(Activation('relu'))
     
     model.add(MaxPooling2D(pool_size=(4, 4)))
@@ -240,5 +240,7 @@ def build_pain_model(x_train):
     
     model.add(Dense(NUM_CLASSES_PAIN))
     model.add(Activation('softmax'))
+    
+    return model
 
     
