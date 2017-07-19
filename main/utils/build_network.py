@@ -3,15 +3,14 @@ from keras import backend as K
 from keras import regularizers
 from keras.regularizers import l2
 from keras.models import Sequential, Model
-from keras.layers import LSTM,TimeDistributed
 from keras.layers import Dense, Dropout, Activation, Flatten, Input, Lambda
-from keras.layers import Conv2D, MaxPooling2D, BatchNormalization, AveragePooling2D, ZeroPadding2D
+from keras.layers import Conv2D, MaxPooling2D, BatchNormalization, AveragePooling2D
 from keras.layers.merge import concatenate
 
 NUM_CLASSES = 8
 NUM_CLASSES_PAIN=13
 PICTURE_DIM = 48
-
+PIC_DIM_PAIN = 160
 
 import sys
 sys.setrecursionlimit(10000)
@@ -194,13 +193,6 @@ def build_model(x_train):
     
     model.add(Flatten())
     
-    if (x_train.shape[1] == 160):
-        model.add(Dense(1024))
-        model.add(Activation('relu'))
-        model.add(Dense(600))
-        model.add(Activation('relu'))
-        
-    
     model.add(Dense(512))
     model.add(Activation('relu'))
     
@@ -242,5 +234,3 @@ def build_pain_model(x_train):
     model.add(Activation('softmax'))
     
     return model
-
-    
