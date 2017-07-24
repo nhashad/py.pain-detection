@@ -245,6 +245,10 @@ def build_gsr_model():
     
     model.add(Dense(40))
     model.add(Activation('relu'))
+    
+    model.add(Dense(32))
+    model.add(Activation('relu'))
+    
     model.add(Dense(NUM_CLASSES_GSR))
     model.add(Activation('softmax'))
     
