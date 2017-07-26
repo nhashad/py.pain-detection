@@ -52,7 +52,7 @@ def training_cross_valid(model, batch_size, epochs, x_train, y_train):
         # evaluate the model
         scores = model.evaluate(x_train[test], y_train[test], verbose=0)
         print("%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
-        print("%s: %.2f%%" % (model.metrics_names[0], scores[0]))
+        print("%s: %f" % (model.metrics_names[0], scores[0]))
         cvscores.append(scores[1] * 100)
     print("%.2f%% (+/- %.2f%%)" % (np.mean(cvscores), np.std(cvscores)))
     return model
