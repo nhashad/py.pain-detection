@@ -240,7 +240,7 @@ def build_gsr_model():
     
     model = Sequential()      
     
-    model.add(Dense(12, input_shape= (2,)))
+    model.add(Dense(12, input_shape= (3,))) #change this no. according to the no. of features taken from the data set
     model.add(Activation('relu'))
     
     model.add(Dense(40))
