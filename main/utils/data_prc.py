@@ -230,7 +230,7 @@ def load_gsr_crossVal(filename):
             return X_train, y_train, X_test, y_test
 
 def dataset_loading(filename):
-    if (filename == 'All_features_noCrossVal' || filename == 'GSR_ds_noCrossVal'):
+    if (filename == 'All_features_noCrossVal' or filename == 'GSR_ds_noCrossVal'):
         filename = DATASET_PATH_PAIN_SR_HR + filename + '.pickle'
  
     elif (filename == 'fer2013'):
