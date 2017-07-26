@@ -35,14 +35,13 @@ PICTURE_DIM_PAIN_H = 160
 PICTURE_DIM_PAIN_W = 160
 DATASET_PATH_PAIN = "../datasets/pain/pain_organized_ds/"
 
-#gsr metadata
-DATASET_PATH_PAIN_GSR = "../datasets/pain/"
-DATASET_SIZE_GSR = 8500
-TRAIN_SIZE_GSR = 5950
-VALIDATION_SIZE_GSR = 1690
-TEST_SIZE_GSR = 843
+#sr&hr metadata
+DATASET_PATH_PAIN_SR_HR = "../datasets/pain/"
+DATASET_SIZE_SR_HR = 8500
+TRAIN_SIZE_SR_HR = 5950
+VALIDATION_SIZE_SR_HR = 1690
+TEST_SIZE_SR_HR= 843
 
-gsr_dataset = np.zeros((DATASET_SIZE_GSR,3))
 emotion_dataset = np.zeros((DATASET_SIZE_EMOTION,3))
 
 def dataset_pickle_pain(filename):
@@ -142,20 +141,28 @@ def dataset_pickle_pain(filename):
             
         return X_train_gray, X_test_gray, X_val_gray
 
+def normalize(x):
+    mean = np.mean(x, axis=0)
+    sigma = np.std(x, axis = 0)
+    X = (x - mean)/sigma
+    return X
+
 def dataset_pickle_gsr_crossVal(filename):
     
-    pickle_file  = DATASET_PATH_PAIN_GSR + filename + '.pickle'
+    pickle_file  = DATASET_PATH_PAIN_SR_HR + filename + '.pickle'
     
     if(os.path.exists(pickle_file)):
         print ('%s already exists. Skipping pickling.' % pickle_file)
     else:
-        gsr_dataset = pd.read_csv(DATASET_PATH_PAIN_GSR + 'GSR_ds.csv')
-        X_train =  np.column_stack((gsr_dataset.rmssdnorm[0:TRAIN_SIZE_GSR+VALIDATION_SIZE_GSR], gsr_dataset.meanRRnorm[0:TRAIN_SIZE_GSR+VALIDATION_SIZE_GSR]))
-        y_train = gsr_dataset.Label[0:TRAIN_SIZE_GSR+VALIDATION_SIZE_GSR]
-
-        X_test = np.column_stack((gsr_dataset.rmssdnorm[TRAIN_SIZE_GSR+VALIDATION_SIZE_GSR:DATASET_SIZE_GSR], gsr_dataset.meanRRnorm[TRAIN_SIZE_GSR+VALIDATION_SIZE_GSR:DATASET_SIZE_GSR]))
-        y_test = gsr_dataset.Label[TRAIN_SIZE_GSR+VALIDATION_SIZE_GSR:DATASET_SIZE_GSR]
+        gsr_dataset = pd.read_csv(DATASET_PATH_PAIN_SR_HR + filename +'.csv')
+        X_train =  np.array(gsr_dataset[0:TRAIN_SIZE_SR_HR+VALIDATION_SIZE_SR_HR])
+        y_train = X_train [:, 0]
+        X_train = np.delete(X_train, 0, 1)
         
+        X_test =  np.array(gsr_dataset[TRAIN_SIZE_SR_HR+VALIDATION_SIZE_SR_HR:DATASET_SIZE_SR_HR])
+        y_test = X_test [:, 0]
+        X_test = np.delete(X_test, 0, 1)
+      
         print 'Pickling', pickle_file, '...'
 
         with open(pickle_file, 'wb') as picklefile:
@@ -171,21 +178,25 @@ def dataset_pickle_gsr_crossVal(filename):
             
 
 def dataset_pickle_gsr(filename):
-    filename = DATASET_PATH_PAIN_GSR + filename + '.csv'
+    filename = DATASET_PATH_PAIN_SR_HR + filename + '.csv'
 
-    pickle_file  = os.path.splitext(filename)[0] + '.pickle'
+    pickle_file  = os.path.splitext(filename)[0] + '_noCrossVal' + '.pickle'
     if(os.path.exists(pickle_file)):
         print ('%s already exists. Skipping pickling.' % pickle_file)
     else:
-        gsr_dataset = pd.read_csv(filename)
-        X_train =  np.column_stack((gsr_dataset.rmssdnorm[0:TRAIN_SIZE_GSR],gsr_dataset.meanRRnorm[0:TRAIN_SIZE_GSR]))
-        y_train = gsr_dataset.Label[0:TRAIN_SIZE_GSR]
-            
-        X_val =  np.column_stack((gsr_dataset.rmssdnorm[TRAIN_SIZE_GSR:TRAIN_SIZE_GSR+VALIDATION_SIZE_GSR], gsr_dataset.meanRRnorm[TRAIN_SIZE_GSR:TRAIN_SIZE_GSR+VALIDATION_SIZE_GSR]))
-        y_val = gsr_dataset.Label[TRAIN_SIZE_GSR:TRAIN_SIZE_GSR+VALIDATION_SIZE_GSR]
-
-        X_test = np.column_stack((gsr_dataset.rmssdnorm[TRAIN_SIZE_GSR+VALIDATION_SIZE_GSR:DATASET_SIZE_GSR], gsr_dataset.meanRRnorm[TRAIN_SIZE_GSR+VALIDATION_SIZE_GSR:DATASET_SIZE_GSR]))
-        y_test = gsr_dataset.Label[TRAIN_SIZE_GSR+VALIDATION_SIZE_GSR:DATASET_SIZE_GSR]
+        gsr_dataset = pd.read_csv(filename )
+        X_train =  np.array(gsr_dataset[0:TRAIN_SIZE_SR_HR])
+        y_train = X_train [:, 0]
+        X_train = np.delete(X_train, 0, 1)
+        
+        X_val =  np.array(gsr_dataset[TRAIN_SIZE_SR_HR:TRAIN_SIZE_SR_HR+VALIDATION_SIZE_SR_HR])
+        y_val = X_val [:, 0]
+        X_val = np.delete(X_val, 0, 1)
+        
+        X_test =  np.array(gsr_dataset[TRAIN_SIZE_SR_HR+VALIDATION_SIZE_SR_HR:DATASET_SIZE_SR_HR])
+        y_test = X_test [:, 0]
+        X_test = np.delete(X_test, 0, 1)
+       
         
         print 'Pickling', pickle_file, '...'
 
@@ -202,7 +213,7 @@ def dataset_pickle_gsr(filename):
             print pickle_file, 'pickled successfully!'
 
 def load_gsr_crossVal(filename):
-    filename = DATASET_PATH_PAIN_GSR + filename + '.pickle'
+    filename = DATASET_PATH_PAIN_SR_HR + filename + '.pickle'
 
     with open(filename, 'rb') as picklefile:
             save = pickle.load(picklefile)
@@ -219,8 +230,8 @@ def load_gsr_crossVal(filename):
             return X_train, y_train, X_test, y_test
 
 def dataset_loading(filename):
-    if (filename == 'GSR_ds'):
-        filename = DATASET_PATH_PAIN_GSR + filename + '.pickle'
+    if (filename == 'All_features_noCrossVal' || filename == 'GSR_ds_noCrossVal'):
+        filename = DATASET_PATH_PAIN_SR_HR + filename + '.pickle'
  
     elif (filename == 'fer2013'):
         filename = DATASET_PATH_EMOTION + filename + '.pickle'
