@@ -9,6 +9,7 @@ from keras.layers.merge import concatenate
 
 NUM_CLASSES = 8
 NUM_CLASSES_PAIN=13
+NUM_CLASSES_GSR = 5
 PICTURE_DIM = 48
 PIC_DIM_PAIN = 160
 
@@ -25,7 +26,7 @@ def BNConv(nb_filter, nb_row, nb_col, w_decay, padding="same"):
 
 
 def inception_v3(w_decay=None):
-    input = Input(shape=(48, 48, 1))
+    input = Input(shape=(PICTURE_DIM, PICTURE_DIM, 1))
 
     conv_1 = BNConv(32, 3, 3, w_decay, padding="valid")(input)
     conv_2 = BNConv(32, 3, 3, w_decay, padding="valid")(conv_1)
@@ -231,6 +232,24 @@ def build_pain_model(x_train):
     model.add(Activation('relu'))
     
     model.add(Dense(NUM_CLASSES_PAIN))
+    model.add(Activation('softmax'))
+    
+    return model
+
+def build_gsr_model():
+    
+    model = Sequential()      
+    
+    model.add(Dense(12, input_shape= (3,))) #change this no. according to the no. of features taken from the data set
+    model.add(Activation('relu'))
+    
+    model.add(Dense(40))
+    model.add(Activation('relu'))
+    
+    model.add(Dense(32))
+    model.add(Activation('relu'))
+    
+    model.add(Dense(NUM_CLASSES_GSR))
     model.add(Activation('softmax'))
     
     return model
