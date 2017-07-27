@@ -163,7 +163,7 @@ def dataset_pickle_gsr_crossVal(filename):
         y_test = X_test [:, 0]
         X_test = np.delete(X_test, 0, 1)
       
-        print 'Pickling', pickle_file, '...'
+        print ('Pickling', pickle_file, '...')
 
         with open(pickle_file, 'wb') as picklefile:
             save = {
@@ -174,7 +174,7 @@ def dataset_pickle_gsr_crossVal(filename):
                 'dataset_ytest': y_test                
             }
             pickle.dump(save, picklefile, pickle.HIGHEST_PROTOCOL)
-            print pickle_file, 'pickled successfully!'
+            print (pickle_file, 'pickled successfully!')
             
 
 def dataset_pickle_gsr(filename):
@@ -198,7 +198,7 @@ def dataset_pickle_gsr(filename):
         X_test = np.delete(X_test, 0, 1)
        
         
-        print 'Pickling', pickle_file, '...'
+        print ('Pickling', pickle_file, '...')
 
         with open(pickle_file, 'wb') as picklefile:
             save = {
@@ -210,7 +210,7 @@ def dataset_pickle_gsr(filename):
                 'dataset_ytest': y_test                
             }
             pickle.dump(save, picklefile, pickle.HIGHEST_PROTOCOL)
-            print pickle_file, 'pickled successfully!'
+            print (pickle_file, 'pickled successfully!')
 
 def load_gsr_crossVal(filename):
     filename = DATASET_PATH_PAIN_SR_HR + filename + '.pickle'
