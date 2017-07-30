@@ -6,6 +6,7 @@ from keras.models import Sequential, Model
 from keras.layers import Dense, Dropout, Activation, Flatten, Input, Lambda
 from keras.layers import Conv2D, MaxPooling2D, BatchNormalization, AveragePooling2D
 from keras.layers.merge import concatenate
+import config as conf
 
 import sys
 sys.setrecursionlimit(10000)
