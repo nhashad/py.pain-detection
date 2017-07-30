@@ -8,7 +8,6 @@ from sklearn.model_selection import StratifiedKFold, KFold, cross_val_predict, c
 from sklearn import svm
 
 
-
 def sgdOpt(learningrate= 0.01, momentum= 0.0,  decay= 0.0, nestrov=False):
     
     opt = SGD(lr= learningrate, momentum=momentum, decay=decay, nesterov=nestrov)
@@ -23,7 +22,7 @@ def rmsPropOpt(learningrate=0.00025, rho=0.9, epsilon=1e-08, decay=0.0):
     return opt
 
 
-def adagradOpt(learningrate= 0.01, epsilon= 1e-08,  decay= 0.0):
+def adagradOpt(learningrate= 0.001, epsilon= 1e-08,  decay= 0.0):
     
     opt = keras.optimizers.Adagrad(lr= learningrate, epsilon= epsilon, decay= decay)
 
