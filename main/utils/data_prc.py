@@ -17,7 +17,7 @@ def dataset_pickle_pain(filename):
     
     pickle_file = conf.DATASET_PATH_PAIN + filename+'.pickle'
     if(os.path.exists(pickle_file)):
-        print ('%s already exists. Skipping pickling.' % pickle_file)
+        print '%s already exists. Skipping pickling.' % pickle_file
         return None, None, None
     
     else:
@@ -101,7 +101,7 @@ def dataset_pickle_pain(filename):
                 'dataset_yval': y_val-3
             }
             pickle.dump(save, picklefile, pickle.HIGHEST_PROTOCOL)
-            print (pickle_file, 'pickled successfully!')
+            print pickle_file, 'pickled successfully!'
             
         return X_train_gray, X_test_gray, X_val_gray
 
@@ -116,7 +116,7 @@ def dataset_pickle_sr_crossVal(filename):
     pickle_file  = conf.DATASET_PATH_PAIN_SR_HR + filename + '.pickle'
     
     if(os.path.exists(pickle_file)):
-        print ('%s already exists. Skipping pickling.' % pickle_file)
+        print '%s already exists. Skipping pickling.' % pickle_file
     else:
         gsr_dataset = pd.read_csv(conf.DATASET_PATH_PAIN_SR_HR + filename +'.csv')
         X_train =  np.array(gsr_dataset[0: conf.TRAIN_SIZE_SR_HR+conf.VALIDATION_SIZE_SR_HR])
@@ -127,7 +127,7 @@ def dataset_pickle_sr_crossVal(filename):
         y_test = X_test [:, 0]
         X_test = np.delete(X_test, 0, 1)
       
-        print ('Pickling', pickle_file, '...')
+        print 'Pickling', pickle_file, '...'
 
         with open(pickle_file, 'wb') as picklefile:
             save = {
@@ -138,7 +138,7 @@ def dataset_pickle_sr_crossVal(filename):
                 'dataset_ytest': y_test                
             }
             pickle.dump(save, picklefile, pickle.HIGHEST_PROTOCOL)
-            print (pickle_file, 'pickled successfully!')
+            print pickle_file, 'pickled successfully!'
             
 
 def dataset_pickle_sr(filename):
@@ -146,7 +146,7 @@ def dataset_pickle_sr(filename):
 
     pickle_file  = os.path.splitext(filename)[0] + '_noCrossVal' + '.pickle'
     if(os.path.exists(pickle_file)):
-        print ('%s already exists. Skipping pickling.' % pickle_file)
+        print '%s already exists. Skipping pickling.' % pickle_file
     else:
         gsr_dataset = pd.read_csv(filename )
         X_train =  np.array(gsr_dataset[0:conf.TRAIN_SIZE_SR_HR])
@@ -162,7 +162,7 @@ def dataset_pickle_sr(filename):
         X_test = np.delete(X_test, 0, 1)
        
         
-        print ('Pickling', pickle_file, '...')
+        print 'Pickling', pickle_file, '...'
 
         with open(pickle_file, 'wb') as picklefile:
             save = {
@@ -174,7 +174,7 @@ def dataset_pickle_sr(filename):
                 'dataset_ytest': y_test                
             }
             pickle.dump(save, picklefile, pickle.HIGHEST_PROTOCOL)
-            print (pickle_file, 'pickled successfully!')
+            print pickle_file, 'pickled successfully!'
 
 def load_sr_crossVal(filename):
     filename = conf.DATASET_PATH_PAIN_SR_HR + filename + '.pickle'
@@ -221,7 +221,7 @@ def dataset_loading(filename):
 
 def remove_disgust(emotion_dataset):
     emotion = emotion_dataset.pop('emotion')
-    print ("Changing Disgust to Anger")
+    print "Changing Disgust to Anger"
     
     for i in range(emotion.size):
         if(emotion[i] == 0 or emotion[i] == 1):
@@ -241,7 +241,7 @@ def dataset_pickle_emotions(filename, X_train_pain, X_test_pain, X_val_pain, for
 
     global emotion_dataset
     if(os.path.exists(pickle_file) and not force):
-        print ('%s already exists. Skipping pickling.' % pickle_file)
+        print '%s already exists. Skipping pickling.' % pickle_file
     else:
         with open(filename, 'rb') :
             emotion_dataset = pd.read_csv(filename)
@@ -298,7 +298,7 @@ def dataset_pickle_emotions(filename, X_train_pain, X_test_pain, X_val_pain, for
         X_val = X_val[rand_val]
         
         
-        print ('Pickling', pickle_file, '...')
+        print 'Pickling', pickle_file, '...'
 
         with open(pickle_file, 'wb') as picklefile:
             save = {
@@ -310,7 +310,7 @@ def dataset_pickle_emotions(filename, X_train_pain, X_test_pain, X_val_pain, for
                 'dataset_yval': y_val
             }
             pickle.dump(save, picklefile, pickle.HIGHEST_PROTOCOL)
-            print (pickle_file, 'pickled successfully!')
+            print pickle_file, 'pickled successfully!'
 
 
 def prepare_emotions_examples(x_train, x_test, x_val):
