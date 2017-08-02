@@ -41,9 +41,9 @@ def inception_v3(w_decay=None):
 
     inception_11 = InceptionFig7(w_decay)(inception_10)    
 
-    pool_13 = Lambda(lambda x: K.mean(x, axis=(1, 2)))(inception_12)
+    pool_13 = Lambda(lambda x: K.mean(x, axis=(1, 2)))(inception_11)
     
-    pool_13 = Dense(NUM_CLASSES, activation= 'softmax')(pool_13)
+    pool_13 = Dense(conf.NUM_CLASSES_EMOTION, activation= 'softmax')(pool_13)
 
     model = Model(input, pool_13)
 

@@ -6,6 +6,7 @@ from keras.optimizers import SGD
 from keras.preprocessing.image import ImageDataGenerator
 from sklearn.model_selection import StratifiedKFold, KFold, cross_val_predict, cross_val_score
 from sklearn import svm
+from keras.callbacks import ReduceLROnPlateau, CSVLogger
 
 
 def sgdOpt(learningrate= 0.01, momentum= 0.0,  decay= 0.0, nestrov=False):
@@ -28,7 +29,7 @@ def adagradOpt(learningrate= 0.001, epsilon= 1e-08,  decay= 0.0):
 
     return opt
 
-def adamOpt(learningrate= 0.01, epsilon= 1e-08,  decay= 0.0):
+def adamOpt(learningrate= 0.001, epsilon= 1e-08,  decay= 0.0):
 
     opt = keras.optimizers.Adam(lr= learningrate, beta_1=0.9, beta_2=0.999, epsilon= epsilon, decay= decay)
     
@@ -58,10 +59,15 @@ def training_cross_valid(model, batch_size, epochs, x_train, y_train):
 
     
     
-def training(model, batch_size, epochs, x_train, y_train, x_val, y_val):
+def training(model, batch_size, epochs, x_train, y_train, x_val, y_val, filename):
+    
+    csv_logger = CSVLogger(filename, separator=',', append=False)
+    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2,
+              patience=2, min_lr=0.00025)
     
     hist = model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, 
-        validation_data= (x_val, y_val), shuffle=True, verbose=1) 
+        validation_data= (x_val, y_val), shuffle=True, callbacks=[reduce_lr],verbose=1)
+    
     """datagen = ImageDataGenerator(
     featurewise_center=True,
     featurewise_std_normalization=True,
@@ -78,15 +84,11 @@ def training(model, batch_size, epochs, x_train, y_train, x_val, y_val):
     # fits the model on batches with real-time data augmentation:
     hist = model.fit_generator(datagen.flow(x_train, y_train, batch_size=batch_size),
                         steps_per_epoch=len(x_train), epochs=epochs, validation_data=datagen.flow(x_val, y_val, batch_size=batch_size), validation_steps=x_val.shape[0])"""
+    
     return model, hist.history
 
 
-def eval_plot(model, x_eval, y_eval, history, epochs):
-    
-
-    scores = model.evaluate(x_eval, y_eval, batch_size = 128,verbose=0)
-    print(scores)
-    
+def plot(model, history, epochs):
     
     epochs_array = np.arange(epochs)
     plt.figure(1)

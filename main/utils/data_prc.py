@@ -107,7 +107,7 @@ def dataset_pickle_pain(filename):
 
 def normalize(x):
     mean = np.mean(x, axis=0)
-    sigma = np.std(x, axis = 0)
+    sigma = np.std(x, axis= 0)
     X = (x - mean)/sigma
     return X
 
@@ -335,6 +335,7 @@ def prepare_emotions_examples(x_train, x_test, x_val):
     return x_train, x_test, x_val
 
 def y_to_categorical(y_train, y_test, num_of_classes, y_val=None):
+    
     if (y_val is None):
         return keras.utils.to_categorical(y_train, num_of_classes), keras.utils.to_categorical(y_test, num_of_classes)
     else:
