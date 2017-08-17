@@ -12,6 +12,8 @@ __pycache__/
 *.xlsx
 *.pickle
 *.h5
+*.jpg
+*.jpeg
 
 # Distribution / packaging
 .Python

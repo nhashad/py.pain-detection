@@ -8,87 +8,51 @@ import matplotlib.pyplot as plt
 from keras.preprocessing import image as image_utils
 from PIL import Image
 from scipy.misc import imread, imsave
+import config as conf
 
 
-#emotion
-TRAIN_SIZE_EMOTION = 20097
-VALIDATION_SIZE_EMOTION = 8612 #0.3*28709
-DATASET_SIZE_EMOTION = 35887
-NUM_CLASSES_EMOTION = 7
-PICTURE_DIM_EMOTION = 48
-DATASET_PATH_EMOTION = "../datasets/emotions/fer2013/"
-
-FIN_TRAIN_SIZE_EMOTION = 21970
-FIN_VALIDATION_SIZE_EMOTION = 9198
-FIN_TEST_SIZE_EMOTION = 7830
-
-
-#pain
-TRAIN_SIZE_PAIN = 26859
-TRAIN_SIZE_PAIN_GEATER_2 = 1873
-VALIDATION_SIZE_PAIN = 9541
-VALIDATION_SIZE_PAIN_GEATER_2 = 586
-TEST_SIZE_PAIN = 9753
-TEST_SIZE_PAIN_GEATER_2 = 652
-NUM_CLASSES_PAIN = 16
-PICTURE_DIM_PAIN_H = 160
-PICTURE_DIM_PAIN_W = 160
-DATASET_PATH_PAIN = "../datasets/pain/pain_organized_ds/"
-
-#sr&hr metadata
-DATASET_PATH_PAIN_SR_HR = "../datasets/pain/"
-DATASET_SIZE_SR_HR = 8500
-TRAIN_SIZE_SR_HR = 5950
-VALIDATION_SIZE_SR_HR = 1690
-TEST_SIZE_SR_HR= 843
-
-emotion_dataset = np.zeros((DATASET_SIZE_EMOTION,3))
+emotion_dataset = np.zeros((conf.DATASET_SIZE_EMOTION,3))
 
 def dataset_pickle_pain(filename):
     
-    pickle_file  = DATASET_PATH_PAIN + filename+'.pickle'
+    pickle_file = conf.DATASET_PATH_PAIN + filename+'.pickle'
     if(os.path.exists(pickle_file)):
-        print ('%s already exists. Skipping pickling.' % pickle_file)
+        print '%s already exists. Skipping pickling.' % pickle_file
         return None, None, None
     
     else:
-        X_train = np.empty([TRAIN_SIZE_PAIN_GEATER_2, PICTURE_DIM_PAIN_H,PICTURE_DIM_PAIN_W,3])
-        y_train = np.empty([TRAIN_SIZE_PAIN_GEATER_2,])
-        X_val = np.empty([VALIDATION_SIZE_PAIN_GEATER_2, PICTURE_DIM_PAIN_H,PICTURE_DIM_PAIN_W,3])
-        y_val = np.empty([VALIDATION_SIZE_PAIN_GEATER_2,])
-        X_test = np.empty([TEST_SIZE_PAIN_GEATER_2, PICTURE_DIM_PAIN_H,PICTURE_DIM_PAIN_W,3])
-        y_test = np.empty([TEST_SIZE_PAIN_GEATER_2,])
+        X_train = np.empty([conf.TRAIN_SIZE_PAIN_GEATER_2, conf.PICTURE_DIM_PAIN_H, conf.PICTURE_DIM_PAIN_W,3])
+        y_train = np.empty([conf.TRAIN_SIZE_PAIN_GEATER_2,])
+        X_val = np.empty([conf.VALIDATION_SIZE_PAIN_GEATER_2, conf.PICTURE_DIM_PAIN_H, conf.PICTURE_DIM_PAIN_W,3])
+        y_val = np.empty([conf.VALIDATION_SIZE_PAIN_GEATER_2,])
+        X_test = np.empty([conf.TEST_SIZE_PAIN_GEATER_2, conf.PICTURE_DIM_PAIN_H, conf.PICTURE_DIM_PAIN_W,3])
+        y_test = np.empty([conf.TEST_SIZE_PAIN_GEATER_2,])
         
-        X_train_gray = np.empty([TRAIN_SIZE_PAIN_GEATER_2, PICTURE_DIM_EMOTION,PICTURE_DIM_EMOTION,1])
-        X_val_gray = np.empty([VALIDATION_SIZE_PAIN_GEATER_2, PICTURE_DIM_EMOTION,PICTURE_DIM_EMOTION,1])
-        X_test_gray = np.empty([TEST_SIZE_PAIN_GEATER_2, PICTURE_DIM_EMOTION,PICTURE_DIM_EMOTION,1])
+        X_train_gray = np.empty([conf.TRAIN_SIZE_PAIN_GEATER_2, conf.PICTURE_DIM_EMOTION, conf.PICTURE_DIM_EMOTION,1])
+        X_val_gray = np.empty([conf.VALIDATION_SIZE_PAIN_GEATER_2, conf.PICTURE_DIM_EMOTION, conf.PICTURE_DIM_EMOTION,1])
+        X_test_gray = np.empty([conf.TEST_SIZE_PAIN_GEATER_2, conf.PICTURE_DIM_EMOTION, conf.PICTURE_DIM_EMOTION,1])
         
 
         train_indx = 0
         val_indx = 0 
         test_indx = 0
-        for label,folder_name in enumerate(os.listdir(DATASET_PATH_PAIN)):
-            folder = os.path.join(DATASET_PATH_PAIN,folder_name)
+        for label,folder_name in enumerate(os.listdir(conf.DATASET_PATH_PAIN)):
+            folder = os.path.join(conf.DATASET_PATH_PAIN,folder_name)
             print(label,folder_name)
             for lbl, subfolder_name in enumerate(os.listdir(folder)):
                 subfolder = os.path.join(folder, subfolder_name)
                 if (int(subfolder_name) > 2):
                     for f in os.listdir(subfolder):
                         fileName = os.path.join(subfolder, f)
-                        image = image_utils.load_img(fileName, target_size=(PICTURE_DIM_PAIN_H, PICTURE_DIM_PAIN_W))
+                        image = image_utils.load_img(fileName, target_size=(conf.PICTURE_DIM_PAIN_H, conf.PICTURE_DIM_PAIN_W))
                         image = image_utils.img_to_array(image).astype(np.float32)
                         image = image/ 255.
 
-                        gray_image = image_utils.load_img(fileName, target_size=(PICTURE_DIM_EMOTION, PICTURE_DIM_EMOTION))
+                        gray_image = image_utils.load_img(fileName, target_size=(conf.PICTURE_DIM_EMOTION, conf.PICTURE_DIM_EMOTION))
                         gray_image = image_utils.img_to_array(gray_image).astype(np.float32)
                         gray_image = gray_image/ 255.
-                        gray_image = np.dot(gray_image[..., :3], [0.299, 0.587, 0.114])
-                        
-                        #plt.imshow(gray_image)
-                        #plt.show()
-                        
-                        gray_image = np.reshape(gray_image, (48, 48, 1))
-                                            
+                        gray_image = np.dot(gray_image[..., :3], [0.299, 0.587, 0.114])                                             
+                        gray_image = np.reshape(gray_image, (48, 48, 1))                                         
                         
                         if (folder_name == 'train'):
                             X_train[train_indx] = image
@@ -107,19 +71,19 @@ def dataset_pickle_pain(filename):
                             val_indx +=1
 
 
-        rand_train =  np.arange(TRAIN_SIZE_PAIN_GEATER_2)
+        rand_train =  np.arange(conf.TRAIN_SIZE_PAIN_GEATER_2)
         np.random.shuffle(rand_train)
         y_train = y_train[rand_train]
         X_train = X_train[rand_train]
         X_train_gray = X_train_gray[rand_train]
 
-        rand_test =  np.arange(TEST_SIZE_PAIN_GEATER_2)
+        rand_test =  np.arange(conf.TEST_SIZE_PAIN_GEATER_2)
         np.random.shuffle(rand_test)
         y_test = y_test[rand_test]
         X_test = X_test[rand_test]
         X_test_gray = X_test_gray[rand_test]
 
-        rand_val =  np.arange(VALIDATION_SIZE_PAIN_GEATER_2)
+        rand_val =  np.arange(conf.VALIDATION_SIZE_PAIN_GEATER_2)
         np.random.shuffle(rand_val)
         y_val = y_val[rand_val]
         X_val = X_val[rand_val]
@@ -137,29 +101,29 @@ def dataset_pickle_pain(filename):
                 'dataset_yval': y_val-3
             }
             pickle.dump(save, picklefile, pickle.HIGHEST_PROTOCOL)
-            print (pickle_file, 'pickled successfully!')
+            print pickle_file, 'pickled successfully!'
             
         return X_train_gray, X_test_gray, X_val_gray
 
 def normalize(x):
     mean = np.mean(x, axis=0)
-    sigma = np.std(x, axis = 0)
+    sigma = np.std(x, axis= 0)
     X = (x - mean)/sigma
     return X
 
-def dataset_pickle_gsr_crossVal(filename):
+def dataset_pickle_sr_crossVal(filename):
     
-    pickle_file  = DATASET_PATH_PAIN_SR_HR + filename + '.pickle'
+    pickle_file  = conf.DATASET_PATH_PAIN_SR_HR + filename + '.pickle'
     
     if(os.path.exists(pickle_file)):
-        print ('%s already exists. Skipping pickling.' % pickle_file)
+        print '%s already exists. Skipping pickling.' % pickle_file
     else:
-        gsr_dataset = pd.read_csv(DATASET_PATH_PAIN_SR_HR + filename +'.csv')
-        X_train =  np.array(gsr_dataset[0:TRAIN_SIZE_SR_HR+VALIDATION_SIZE_SR_HR])
+        gsr_dataset = pd.read_csv(conf.DATASET_PATH_PAIN_SR_HR + filename +'.csv')
+        X_train =  np.array(gsr_dataset[0: conf.TRAIN_SIZE_SR_HR+conf.VALIDATION_SIZE_SR_HR])
         y_train = X_train [:, 0]
         X_train = np.delete(X_train, 0, 1)
         
-        X_test =  np.array(gsr_dataset[TRAIN_SIZE_SR_HR+VALIDATION_SIZE_SR_HR:DATASET_SIZE_SR_HR])
+        X_test =  np.array(gsr_dataset[conf.TRAIN_SIZE_SR_HR+conf.VALIDATION_SIZE_SR_HR:conf.DATASET_SIZE_SR_HR])
         y_test = X_test [:, 0]
         X_test = np.delete(X_test, 0, 1)
       
@@ -177,23 +141,23 @@ def dataset_pickle_gsr_crossVal(filename):
             print pickle_file, 'pickled successfully!'
             
 
-def dataset_pickle_gsr(filename):
-    filename = DATASET_PATH_PAIN_SR_HR + filename + '.csv'
+def dataset_pickle_sr(filename):
+    filename = conf.DATASET_PATH_PAIN_SR_HR + filename + '.csv'
 
     pickle_file  = os.path.splitext(filename)[0] + '_noCrossVal' + '.pickle'
     if(os.path.exists(pickle_file)):
-        print ('%s already exists. Skipping pickling.' % pickle_file)
+        print '%s already exists. Skipping pickling.' % pickle_file
     else:
         gsr_dataset = pd.read_csv(filename )
-        X_train =  np.array(gsr_dataset[0:TRAIN_SIZE_SR_HR])
+        X_train =  np.array(gsr_dataset[0:conf.TRAIN_SIZE_SR_HR])
         y_train = X_train [:, 0]
         X_train = np.delete(X_train, 0, 1)
         
-        X_val =  np.array(gsr_dataset[TRAIN_SIZE_SR_HR:TRAIN_SIZE_SR_HR+VALIDATION_SIZE_SR_HR])
+        X_val =  np.array(gsr_dataset[conf.TRAIN_SIZE_SR_HR:conf.TRAIN_SIZE_SR_HR+conf.VALIDATION_SIZE_SR_HR])
         y_val = X_val [:, 0]
         X_val = np.delete(X_val, 0, 1)
         
-        X_test =  np.array(gsr_dataset[TRAIN_SIZE_SR_HR+VALIDATION_SIZE_SR_HR:DATASET_SIZE_SR_HR])
+        X_test =  np.array(gsr_dataset[conf.TRAIN_SIZE_SR_HR+conf.VALIDATION_SIZE_SR_HR:conf.DATASET_SIZE_SR_HR])
         y_test = X_test [:, 0]
         X_test = np.delete(X_test, 0, 1)
        
@@ -212,8 +176,8 @@ def dataset_pickle_gsr(filename):
             pickle.dump(save, picklefile, pickle.HIGHEST_PROTOCOL)
             print pickle_file, 'pickled successfully!'
 
-def load_gsr_crossVal(filename):
-    filename = DATASET_PATH_PAIN_SR_HR + filename + '.pickle'
+def load_sr_crossVal(filename):
+    filename = conf.DATASET_PATH_PAIN_SR_HR + filename + '.pickle'
 
     with open(filename, 'rb') as picklefile:
             save = pickle.load(picklefile)
@@ -231,12 +195,12 @@ def load_gsr_crossVal(filename):
 
 def dataset_loading(filename):
     if (filename == 'All_features_noCrossVal' or filename == 'GSR_ds_noCrossVal'):
-        filename = DATASET_PATH_PAIN_SR_HR + filename + '.pickle'
+        filename = conf.DATASET_PATH_PAIN_SR_HR + filename + '.pickle'
  
     elif (filename == 'fer2013'):
-        filename = DATASET_PATH_EMOTION + filename + '.pickle'
+        filename = conf.DATASET_PATH_EMOTION + filename + '.pickle'
     else:
-        filename = DATASET_PATH_PAIN + filename + '.pickle'
+        filename = conf.DATASET_PATH_PAIN + filename + '.pickle'
 
     with open(filename, 'rb') as picklefile:
             save = pickle.load(picklefile)
@@ -257,7 +221,7 @@ def dataset_loading(filename):
 
 def remove_disgust(emotion_dataset):
     emotion = emotion_dataset.pop('emotion')
-    print ("Changing Disgust to Anger")
+    print "Changing Disgust to Anger"
     
     for i in range(emotion.size):
         if(emotion[i] == 0 or emotion[i] == 1):
@@ -271,24 +235,24 @@ def remove_disgust(emotion_dataset):
 
 def dataset_pickle_emotions(filename, X_train_pain, X_test_pain, X_val_pain, force=False):
 
-    filename = DATASET_PATH_EMOTION + filename + '.csv'
+    filename = conf.DATASET_PATH_EMOTION + filename + '.csv'
 
     pickle_file  = os.path.splitext(filename)[0] + '.pickle'
 
     global emotion_dataset
     if(os.path.exists(pickle_file) and not force):
-        print ('%s already exists. Skipping pickling.' % pickle_file)
+        print '%s already exists. Skipping pickling.' % pickle_file
     else:
         with open(filename, 'rb') :
             emotion_dataset = pd.read_csv(filename)
-            X_train = emotion_dataset.pixels[0:TRAIN_SIZE_EMOTION]
-            y_train = emotion_dataset.emotion[0:TRAIN_SIZE_EMOTION]
+            X_train = emotion_dataset.pixels[0:conf.TRAIN_SIZE_EMOTION]
+            y_train = emotion_dataset.emotion[0:conf.TRAIN_SIZE_EMOTION]
             
-            X_val = emotion_dataset.pixels[TRAIN_SIZE_EMOTION:TRAIN_SIZE_EMOTION+VALIDATION_SIZE_EMOTION]
-            y_val = emotion_dataset.emotion[TRAIN_SIZE_EMOTION:TRAIN_SIZE_EMOTION+VALIDATION_SIZE_EMOTION]
+            X_val = emotion_dataset.pixels[conf.TRAIN_SIZE_EMOTION:conf.TRAIN_SIZE_EMOTION+conf.VALIDATION_SIZE_EMOTION]
+            y_val = emotion_dataset.emotion[conf.TRAIN_SIZE_EMOTION:conf.TRAIN_SIZE_EMOTION+conf.VALIDATION_SIZE_EMOTION]
 
-            X_test = emotion_dataset.pixels[TRAIN_SIZE_EMOTION+VALIDATION_SIZE_EMOTION:DATASET_SIZE_EMOTION]
-            y_test = emotion_dataset.emotion[TRAIN_SIZE_EMOTION+VALIDATION_SIZE_EMOTION:DATASET_SIZE_EMOTION]
+            X_test = emotion_dataset.pixels[conf.TRAIN_SIZE_EMOTION+conf.VALIDATION_SIZE_EMOTION:conf.DATASET_SIZE_EMOTION]
+            y_test = emotion_dataset.emotion[conf.TRAIN_SIZE_EMOTION+conf.VALIDATION_SIZE_EMOTION:conf.DATASET_SIZE_EMOTION]
 
         
         X_train = np.array(list(map(lambda arr: np.fromiter(list(map(lambda str: int(str),
@@ -314,27 +278,27 @@ def dataset_pickle_emotions(filename, X_train_pain, X_test_pain, X_val_pain, for
         X_train = np.concatenate((X_train, X_train_pain), axis=0)
         X_test = np.concatenate((X_test, X_test_pain), axis=0)
         X_val = np.concatenate((X_val, X_val_pain), axis=0)
-        y_train = np.concatenate((y_train, np.ones(TRAIN_SIZE_PAIN_GEATER_2)*7), axis=0)
-        y_val = np.concatenate((y_val, np.ones(VALIDATION_SIZE_PAIN_GEATER_2)*7), axis=0)
-        y_test = np.concatenate((y_test, np.ones(TEST_SIZE_PAIN_GEATER_2)*7), axis=0)
+        y_train = np.concatenate((y_train, np.ones(conf.TRAIN_SIZE_PAIN_GEATER_2)*7), axis=0)
+        y_val = np.concatenate((y_val, np.ones(conf.VALIDATION_SIZE_PAIN_GEATER_2)*7), axis=0)
+        y_test = np.concatenate((y_test, np.ones(conf.TEST_SIZE_PAIN_GEATER_2)*7), axis=0)
         
-        rand_train =  np.arange(FIN_TRAIN_SIZE_EMOTION)
+        rand_train =  np.arange(conf.FIN_TRAIN_SIZE_EMOTION)
         np.random.shuffle(rand_train)
         y_train = y_train[rand_train]
         X_train = X_train[rand_train]
 
-        rand_test =  np.arange(FIN_TEST_SIZE_EMOTION)
+        rand_test =  np.arange(conf.FIN_TEST_SIZE_EMOTION)
         np.random.shuffle(rand_test)
         y_test = y_test[rand_test]
         X_test = X_test[rand_test]
 
-        rand_val =  np.arange(FIN_VALIDATION_SIZE_EMOTION)
+        rand_val =  np.arange(conf.FIN_VALIDATION_SIZE_EMOTION)
         np.random.shuffle(rand_val)
         y_val = y_val[rand_val]
         X_val = X_val[rand_val]
         
         
-        print ('Pickling', pickle_file, '...')
+        print 'Pickling', pickle_file, '...'
 
         with open(pickle_file, 'wb') as picklefile:
             save = {
@@ -346,12 +310,12 @@ def dataset_pickle_emotions(filename, X_train_pain, X_test_pain, X_val_pain, for
                 'dataset_yval': y_val
             }
             pickle.dump(save, picklefile, pickle.HIGHEST_PROTOCOL)
-            print (pickle_file, 'pickled successfully!')
+            print pickle_file, 'pickled successfully!'
 
 
 def prepare_emotions_examples(x_train, x_test, x_val):
     
-    x_train, x_test, x_val =  np.reshape(x_train,(x_train.shape[0], PICTURE_DIM_EMOTION, PICTURE_DIM_EMOTION,1)),np.reshape(x_test,(x_test.shape[0], PICTURE_DIM_EMOTION, PICTURE_DIM_EMOTION,1)),np.reshape(x_val,(x_val.shape[0], PICTURE_DIM_EMOTION, PICTURE_DIM_EMOTION,1))
+    x_train, x_test, x_val =  np.reshape(x_train,(x_train.shape[0], conf.PICTURE_DIM_EMOTION, conf.PICTURE_DIM_EMOTION,1)),np.reshape(x_test,(x_test.shape[0], conf.PICTURE_DIM_EMOTION, conf.PICTURE_DIM_EMOTION,1)),np.reshape(x_val,(x_val.shape[0], conf.PICTURE_DIM_EMOTION, conf.PICTURE_DIM_EMOTION,1))
     
     if (x_train.shape[1]==160):
         x_train = x_train.astype('uint8')
@@ -371,6 +335,7 @@ def prepare_emotions_examples(x_train, x_test, x_val):
     return x_train, x_test, x_val
 
 def y_to_categorical(y_train, y_test, num_of_classes, y_val=None):
+    
     if (y_val is None):
         return keras.utils.to_categorical(y_train, num_of_classes), keras.utils.to_categorical(y_test, num_of_classes)
     else:
