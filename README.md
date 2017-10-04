@@ -1,5 +1,5 @@
 <p align="center">
-<h2>Emotion Detection and Pain Assessment System
+<h2>Emotion Detection and Pain Assessment System</h2>
 </p>
 
 Pain sensation is one of the diagnostic indicators of sickness, and is defined as: “an unpleasant sensory and emotional experience that is associated with actual or potential tissue damage or described in such terms”[33]. Pain is naturally relative; each person interprets their feeling of pain with respect to their previous experiences with the sensation.
