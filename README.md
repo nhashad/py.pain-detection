@@ -15,7 +15,7 @@
 
 Pain sensation is one of the diagnostic indicators of sickness, and is defined as:
 
-> _“an unpleasant sensory and emotional experience that is associated with actual or potential tissue damage or described in such terms”_. — International Association for the Study of Pain
+> _“an unpleasant sensory and emotional experience that is associated with actual or potential tissue damage or described in such terms.”_ — International Association for the Study of Pain
 
 Pain is naturally relative; each person interprets their feeling of pain with respect to their previous experiences with the sensation.
 
