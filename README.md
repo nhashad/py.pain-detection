@@ -8,21 +8,21 @@
 
 ## Table of Contents
 1. [Motivation](#motivation)
-2. [Description](#description)
+2. [Summary](#summary)
 
 <a name="motivation"></a>
 ### Motivation
 
 Pain sensation is one of the diagnostic indicators of sickness, and is defined as:
 
-> _“an unpleasant sensory and emotional experience that is associated with actual or potential tissue damage or described in such terms”_.
+> _“an unpleasant sensory and emotional experience that is associated with actual or potential tissue damage or described in such terms”_. — International Association for the Study of Pain
 
 Pain is naturally relative; each person interprets their feeling of pain with respect to their previous experiences with the sensation.
 
 Stemming from the scientific and medical significance of emotion detection, as well as the merits promised by the prospect of an objectively precise pain detection system; this project was built to facilitate such possibilities by only using images.
 
-<a name="description"></a>
-### Description
+<a name="summary"></a>
+### Summary
 
 The emotion detection and pain assessment system is responsible for taking input via capturing real-time frames of the user’s face, and afterwards be able to differentiate between the 7 basic emotions, detect the existence of pain sensation as well as its intensity.
 
