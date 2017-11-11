@@ -9,6 +9,7 @@
 ## Table of Contents
 1. [Motivation](#motivation)
 2. [Summary](#summary)
+3. [Disclaimer](#disclaimer)
 
 <a name="motivation"></a>
 ### Motivation
@@ -27,3 +28,8 @@ Stemming from the scientific and medical significance of emotion detection, as w
 The emotion detection and pain assessment system is responsible for taking input via capturing real-time frames of the user’s face, and afterwards be able to differentiate between the 7 basic emotions, detect the existence of pain sensation as well as its intensity.
 
 The system deep convolutional neural network models are trained on the Facial Expression Recognition dataset as well as the UNBC-McMaster shoulder pain levels dataset. Therefore is able to classify the facial expressions in frames of the test set created along the course of the project, consisting of 24 images, constructed by 8 users, with very high confidence and precision up to 70% to 80%; and in the case of pain classification, the integrated system is able to assess the user’s pain level with an accuracy above 90%.
+
+<a name="disclaimer"></a>
+### Disclaimer
+
+This project is the core of my bachelor project at DHBW Stuttgart under the supervision of Prof. Dr. Dirk Reichardt.
